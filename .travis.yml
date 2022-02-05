@@ -3,11 +3,27 @@ sudo: required
 services:
   - docker
   
+
+  --atemp to build
 before_install:
   - docker build -t moatazkhalil/docker-react -f Dockerfile.dev .  
 
+--run tests
 script:
   - docker run -e CI=true moatazkhalil/docker-react npm run test
+
+--deploy over elasticbeanstalk
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "docker-react"
+  env: "Dockerreact-env"
+  bucket_name: "elasticbeanstalk-us-east-1-273562053687"
+  bucket_path: "docker-react"
+  on:
+    branch: master
+  access_key_id: $AWS_access_key  
+  secret_acces_key: $AWS-secret-key
 
 
 
